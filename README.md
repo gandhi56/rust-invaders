@@ -2,7 +2,7 @@
 
 ## Overview
 
-The classic invaders games implemented in Rust using the bevy game engine, following Jeremy Chone's tutorial at https://www.youtube.com/watch?v=j7qHwb7geIM.
+The classic invaders game implemented in Rust using the bevy game engine, following Jeremy Chone's tutorial at https://www.youtube.com/watch?v=j7qHwb7geIM.
 
 ## Build and run
 

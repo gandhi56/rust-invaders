@@ -34,8 +34,6 @@ fn player_spawn_system(
   let last_shot = player_state.last_shot;
 
   if !player_state.on && (last_shot == -1. || now > last_shot + PLAYER_RESPAWN_DELAY) {
-
-    
     let bottom = -win_size.h / 2.;
     commands.spawn_bundle(SpriteBundle {
       texture: game_textures.player.clone(),
@@ -56,16 +54,22 @@ fn player_spawn_system(
 
 fn player_keyboard_event_system(
   kb: Res<Input<KeyCode>>,
-  mut query: Query<&mut Velocity, With<Player>>,
+  mut velocity_query: Query<&mut Velocity, With<Player>>,
+  transform_query: Query<&Transform, With<Player>>,
+  win_size: Res<WinSize>,
 ) {
-  if let Ok(mut velocity) = query.get_single_mut() {
-    velocity.x = if kb.pressed(KeyCode::Left) {
-      -1.
-    } else if kb.pressed(KeyCode::Right) {
-      1.
-    } else {
-      0.
-    };
+  if let Ok(mut velocity) = velocity_query.get_single_mut() {
+    if let Ok(transform) = transform_query.get_single() {
+      velocity.x = if kb.pressed(KeyCode::Left) && 
+        transform.translation.x > -win_size.w / 2. + PLAYER_SIZE.0 / 2.{
+        -1.
+      } else if kb.pressed(KeyCode::Right) && 
+        transform.translation.x < win_size.w / 2. - PLAYER_SIZE.0 / 2.{
+        1.
+      } else {
+        0.
+      };
+    }
   }
 }
 
